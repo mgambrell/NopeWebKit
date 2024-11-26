@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Event sheet 1</name>
+    <events>
+        <variable constant="0" name="running" sid="614731117721583" static="0" type="number">0</variable>
+        <variable constant="0" name="duration" sid="340474876459454" static="0" type="number">0</variable>
+        <event-block sid="647325735952330">
+            <conditions>
+                <condition id="0" name="On clicked" sid="727640354538972" type="btn_NopeReadFileAsyncImg" />
+            </conditions>
+            <actions>
+                <action id="0" name="Call function" sid="610529032598003" type="Function">
+                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+                <action id="31" name="Begin Read File" sid="685144846213770" type="NopeWebkit">
+                    <param id="0" name="Tag">&quot;tag2&quot;</param>
+                    <param id="1" name="Path">&quot;cutebite_nxicon.png&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="484591449732476">
+            <conditions>
+                <condition id="8" name="On Read File Ended" sid="815538138039732" type="NopeWebkit">
+                    <param id="0" name="Tag">&quot;tag2&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="223728783560010" type="XSize">
+                    <param id="0" name="Text">str(len(NopeWebkit.LastData))</param>
+                </action>
+                <action id="0" name="Call function" sid="631907463755597" type="Function">
+                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="266163146636559">
+            <conditions>
+                <condition id="0" name="On clicked" sid="417147713034359" type="btn_AjaxReadFileAsync" />
+            </conditions>
+            <actions>
+                <action id="0" name="Call function" sid="892310961796597" type="Function">
+                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+                <action id="1" name="Request project file" sid="922125250675272" type="AJAX">
+                    <param id="0" name="Tag">&quot;tag1&quot;</param>
+                    <param id="1" name="File">cutebite_nxicon.png</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="476683147244307">
+            <conditions>
+                <condition id="0" name="On completed" sid="753572441317518" type="AJAX">
+                    <param id="0" name="Tag">&quot;tag1&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="578594309962553" type="XSize">
+                    <param id="0" name="Text">str(len(AJAX.LastData))</param>
+                </action>
+                <action id="0" name="Call function" sid="175930314411168" type="Function">
+                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="443153982082995">
+            <conditions>
+                <condition id="0" name="On clicked" sid="140288246035894" type="btn_NopeReadFileSync" />
+            </conditions>
+            <actions>
+                <action id="0" name="Call function" sid="118796455928770" type="Function">
+                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+                <action id="0" name="Set text" sid="284047442076334" type="XSize">
+                    <param id="0" name="Text">str(len(NopeWebkit.ReadFile(&quot;cutebite_nxicon.png&quot;)))</param>
+                </action>
+                <action id="0" name="Call function" sid="576096733107946" type="Function">
+                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="193035992634015">
+            <conditions>
+                <condition id="0" name="On function" sid="839464839219143" type="Function">
+                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="259237279436933" type="System">
+                    <param id="0" name="Variable">duration</param>
+                    <param id="1" name="Value">0</param>
+                </action>
+                <action id="-9" name="Set value" sid="826907484818313" type="System">
+                    <param id="0" name="Variable">running</param>
+                    <param id="1" name="Value">1</param>
+                </action>
+                <action id="0" name="Set text" sid="991636666076660" type="XSize">
+                    <param id="0" name="Text">&quot;A&quot;</param>
+                </action>
+                <action id="0" name="Set text" sid="105399491685169" type="XDuration">
+                    <param id="0" name="Text">&quot;B&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="202065307140386">
+            <conditions>
+                <condition id="0" name="On function" sid="849130358301046" type="Function">
+                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="922176458214952" type="System">
+                    <param id="0" name="Variable">running</param>
+                    <param id="1" name="Value">0</param>
+                </action>
+                <action id="0" name="Call function" sid="459468566501860" type="Function">
+                    <param id="0" name="Name">&quot;RefreshDuration&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="454631582825630">
+            <conditions>
+                <condition id="-1" name="Every tick" sid="658161115299505" type="System" />
+                <condition id="-14" name="Compare variable" sid="423490777833436" type="System">
+                    <param id="0" name="Variable">running</param>
+                    <param id="1" name="Comparison">0</param>
+                    <param id="2" name="Value">1</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-10" name="Add to" sid="253453258952813" type="System">
+                    <param id="0" name="Variable">duration</param>
+                    <param id="1" name="Value">dt</param>
+                </action>
+                <action id="0" name="Call function" sid="507425033974118" type="Function">
+                    <param id="0" name="Name">&quot;RefreshDuration&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="605314326468237">
+            <conditions>
+                <condition id="0" name="On function" sid="452657537269360" type="Function">
+                    <param id="0" name="Name">&quot;RefreshDuration&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="815761879856523" type="XDuration">
+                    <param id="0" name="Text">str(duration)</param>
+                </action>
+            </actions>
+        </event-block>
+    </events>
+</c2eventsheet>

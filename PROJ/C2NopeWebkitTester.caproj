@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2project>
+    <name>C2NopeWebkitTester</name>
+    <description></description>
+    <version>1.0.0.0</version>
+    <author></author>
+    <author-email></author-email>
+    <author-website>http://</author-website>
+    <app-id>com.mycompany.myapp</app-id>
+    <unique-id>303a0lu6qljlc</unique-id>
+    <saved-with-version>28000</saved-with-version>
+    <used-plugins>
+        <plugin author="Scirra" id="AJAX" version="1">AJAX</plugin>
+        <plugin author="Scirra" id="Browser" version="1">Browser</plugin>
+        <plugin author="Scirra" id="Button" version="1">Button</plugin>
+        <plugin author="Scirra" id="Function" version="1">Function</plugin>
+        <plugin author="NotScirra" id="NopeWebkit" version="1">NopeWebkit</plugin>
+        <plugin author="Scirra" id="Text" version="1">Text</plugin>
+        <plugin author="Scirra" id="TextBox" version="1">Text box</plugin>
+    </used-plugins>
+    <used-behaviors />
+    <used-effects />
+    <configurations>
+        <configuration exporter-descname="HTML5" exporter-id="html5" name="HTML5" />
+    </configurations>
+    <window-size>
+        <width>854</width>
+        <height>480</height>
+    </window-size>
+    <pixel-rounding>0</pixel-rounding>
+    <preview-effects>1</preview-effects>
+    <use-loader-layout>0</use-loader-layout>
+    <configuration-settings>
+        <prop name="Clear background">Yes</prop>
+        <prop name="Downscaling">Medium quality</prop>
+        <prop name="Enable WebGL">On</prop>
+        <prop name="Fullscreen in browser">Letterbox scale</prop>
+        <prop name="Fullscreen scaling">High quality</prop>
+        <prop name="Loader style">Nothing (not recommended)</prop>
+        <prop name="Orientations">Any</prop>
+        <prop name="Pause on unfocus">No</prop>
+        <prop name="Physics engine">Box2D asm.js</prop>
+        <prop name="Preload sounds">Yes</prop>
+        <prop name="Preview browser">Chrome</prop>
+        <prop name="Sampling">Linear</prop>
+        <prop name="Use high-DPI display">Yes</prop>
+    </configuration-settings>
+    <object-folder>
+        <object-type name="btn_NopeReadFileSync" sid="490927633681868">
+            <plugin id="Button" />
+        </object-type>
+        <object-type name="XSize" sid="410084471518204">
+            <plugin id="TextBox" />
+        </object-type>
+        <object-type name="Function" sid="603938160938706">
+            <plugin id="Function" />
+        </object-type>
+        <object-type name="XDuration" sid="300963602407640">
+            <plugin id="TextBox" />
+        </object-type>
+        <object-type name="Browser" sid="451604287520715">
+            <plugin id="Browser" />
+        </object-type>
+        <object-type name="NopeWebkit" sid="537182550975033">
+            <plugin id="NopeWebkit" />
+        </object-type>
+        <object-type name="AJAX" sid="155363732940033">
+            <plugin id="AJAX" />
+        </object-type>
+        <object-type name="btn_AjaxReadFileAsync" sid="577127104596544">
+            <plugin id="Button" />
+        </object-type>
+        <object-type name="Text" sid="712254145520366">
+            <plugin id="Text" />
+        </object-type>
+        <object-type name="btn_NopeReadFileAsyncImg" sid="894261725611876">
+            <plugin id="Button" />
+        </object-type>
+    </object-folder>
+    <families />
+    <layout-folder>
+        <layout>Layout 1.xml</layout>
+    </layout-folder>
+    <event-folder>
+        <event-sheet>Event sheet 1.xml</event-sheet>
+    </event-folder>
+    <global-instances>
+        <global-instance type="Function" uid="5" />
+        <global-instance type="Browser" uid="2" />
+        <global-instance type="NopeWebkit" uid="0" />
+        <global-instance type="AJAX" uid="3" />
+    </global-instances>
+    <sounds-folder />
+    <music-folder />
+    <files-folder>
+        <file-folder name="Icons">
+            <file name="icon-16.png" />
+            <file name="icon-32.png" />
+            <file name="icon-114.png" />
+            <file name="icon-128.png" />
+            <file name="icon-256.png" />
+            <file name="loading-logo.png" />
+        </file-folder>
+        <file name="cutebite_nxicon.png" />
+        <file name="cutebite_nxicon.png.xml" />
+    </files-folder>
+</c2project>
