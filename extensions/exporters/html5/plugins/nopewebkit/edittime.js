@@ -72,9 +72,6 @@ AddCondition(6, cf_trigger, "On folder dialog cancel", "File dialogs", "On folde
 
 AddCondition(7, cf_trigger, "On save dialog cancel", "File dialogs", "On save dialog cancel", "Triggered if the save dialog is cancelled.", "OnSaveDlgCancel");
 
-AddStringParam("Tag", "A tag, which can be anything you like, to distinguish between different requests.", "\"\"");
-AddCondition(8, cf_trigger, "On Read File Ended", "NopeJS", "On Read File Ended (of <b>{0}</b>)", "Triggered when an BeginReadFile completes successfully.", "OnEndReadFile");
-
 ////////////////////////////////////////
 // Actions
 
@@ -182,10 +179,6 @@ AddAction(29, af_none, "Open browser", "File system", "Open browser to URL <i>{0
 AddStringParam("Path", "File path to open. The default app associated with the file will be opened.");
 AddAction(30, af_none, "Shell open", "File system", "Shell open <i>{0}</i>", "Open the default associated app for a file.", "ShellOpen");
 
-AddStringParam("Tag", "A tag, which can be anything you like, to distinguish between different AJAX requests.", "\"\"");
-AddStringParam("Path", "Enter the file path to read asynchronously.", "");
-AddAction(31, af_none, "Begin Read File", "File system", "Read file <i>{1}</i> (asynchronously) (tag <i>{0}</i>)", "Read some text from a file (asynchronously).", "BeginReadFile");
-
 ////////////////////////////////////////
 // Expressions
 
@@ -226,8 +219,6 @@ AddExpression(13, ef_return_string, "", "Clipboard", "ClipboardText", "The curre
 
 AddExpression(15, ef_return_string, "", "File system", "ProjectFilesFolder", "Return the folder path to project files (i.e. where index.html is). Note it may not have write permission.");
 AddExpression(16, ef_return_string, "", "File system", "ProjectFilesFolderURL", "Return the folder path to project files as a file URL. Use this for any URL parameters.");
-
-AddExpression(17, ef_return_string, "Get last data", "NopeWebKit", "LastData", "Get the data returned by the last successful request.");
 
 ////////////////////////////////////////
 ACESDone();

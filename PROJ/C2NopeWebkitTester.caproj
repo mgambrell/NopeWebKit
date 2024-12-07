@@ -76,6 +76,9 @@
         <object-type name="btn_NopeReadFileAsyncImg" sid="894261725611876">
             <plugin id="Button" />
         </object-type>
+        <object-type name="Button" sid="810518585206132">
+            <plugin id="Button" />
+        </object-type>
     </object-folder>
     <families />
     <layout-folder>
@@ -93,15 +96,7 @@
     <sounds-folder />
     <music-folder />
     <files-folder>
-        <file-folder name="Icons">
-            <file name="icon-16.png" />
-            <file name="icon-32.png" />
-            <file name="icon-114.png" />
-            <file name="icon-128.png" />
-            <file name="icon-256.png" />
-            <file name="loading-logo.png" />
-        </file-folder>
         <file name="cutebite_nxicon.png" />
-        <file name="cutebite_nxicon.png.xml" />
+        <file name="data_index.json" />
     </files-folder>
 </c2project>

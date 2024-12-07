@@ -5,68 +5,6 @@
     <events>
         <variable constant="0" name="running" sid="614731117721583" static="0" type="number">0</variable>
         <variable constant="0" name="duration" sid="340474876459454" static="0" type="number">0</variable>
-        <event-block sid="647325735952330">
-            <conditions>
-                <condition id="0" name="On clicked" sid="727640354538972" type="btn_NopeReadFileAsyncImg" />
-            </conditions>
-            <actions>
-                <action id="0" name="Call function" sid="610529032598003" type="Function">
-                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
-                    <param id="1" name="Parameter {n}"></param>
-                </action>
-                <action id="31" name="Begin Read File" sid="685144846213770" type="NopeWebkit">
-                    <param id="0" name="Tag">&quot;tag2&quot;</param>
-                    <param id="1" name="Path">&quot;cutebite_nxicon.png&quot;</param>
-                </action>
-            </actions>
-        </event-block>
-        <event-block sid="484591449732476">
-            <conditions>
-                <condition id="8" name="On Read File Ended" sid="815538138039732" type="NopeWebkit">
-                    <param id="0" name="Tag">&quot;tag2&quot;</param>
-                </condition>
-            </conditions>
-            <actions>
-                <action id="0" name="Set text" sid="223728783560010" type="XSize">
-                    <param id="0" name="Text">str(len(NopeWebkit.LastData))</param>
-                </action>
-                <action id="0" name="Call function" sid="631907463755597" type="Function">
-                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
-                    <param id="1" name="Parameter {n}"></param>
-                </action>
-            </actions>
-        </event-block>
-        <event-block sid="266163146636559">
-            <conditions>
-                <condition id="0" name="On clicked" sid="417147713034359" type="btn_AjaxReadFileAsync" />
-            </conditions>
-            <actions>
-                <action id="0" name="Call function" sid="892310961796597" type="Function">
-                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
-                    <param id="1" name="Parameter {n}"></param>
-                </action>
-                <action id="1" name="Request project file" sid="922125250675272" type="AJAX">
-                    <param id="0" name="Tag">&quot;tag1&quot;</param>
-                    <param id="1" name="File">cutebite_nxicon.png</param>
-                </action>
-            </actions>
-        </event-block>
-        <event-block sid="476683147244307">
-            <conditions>
-                <condition id="0" name="On completed" sid="753572441317518" type="AJAX">
-                    <param id="0" name="Tag">&quot;tag1&quot;</param>
-                </condition>
-            </conditions>
-            <actions>
-                <action id="0" name="Set text" sid="578594309962553" type="XSize">
-                    <param id="0" name="Text">str(len(AJAX.LastData))</param>
-                </action>
-                <action id="0" name="Call function" sid="175930314411168" type="Function">
-                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
-                    <param id="1" name="Parameter {n}"></param>
-                </action>
-            </actions>
-        </event-block>
         <event-block sid="443153982082995">
             <conditions>
                 <condition id="0" name="On clicked" sid="140288246035894" type="btn_NopeReadFileSync" />
@@ -154,6 +92,16 @@
             <actions>
                 <action id="0" name="Set text" sid="815761879856523" type="XDuration">
                     <param id="0" name="Text">str(duration)</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="363851420568804">
+            <conditions>
+                <condition id="0" name="On clicked" sid="168181586700216" type="Button" />
+            </conditions>
+            <actions>
+                <action id="5" name="List files" sid="216442607024302" type="NopeWebkit">
+                    <param id="0" name="Path">&quot;/Test&quot;</param>
                 </action>
             </actions>
         </event-block>

@@ -6,7 +6,7 @@ assert2(cr.plugins_, "cr.plugins_ not created");
 
 /////////////////////////////////////
 // Plugin class
-cr.plugins_.NopeWebkit = function(runtime)
+cr.plugins_.NodeWebkit = function(runtime)
 {
 	this.runtime = runtime;
 };
@@ -28,47 +28,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	var droppedfile = "";
 	var chosenpath = "";
 	
-	//utilities for FS emulation
-	const xhr = new XMLHttpRequest();
-	var index = null;
-	var indexEntries = null;
-	
-	//------------------------------
-	//LOCAL UTILITIES
-	
-	function _normalizePath(filePath)
-	{
-		if(filePath[0] != '/')
-			filePath = '/' + filePath;
-		return filePath;
-	}
-	
-	function _exists(filePath)
-	{
-		return index[filePath] != undefined;
-	}
-	
-	function _loadFileSync(filePath)
-	{
-		console.log("_loadFileSync: " + filePath);
-		xhr.open('GET', filePath, false); // false for synchronous request
-		try {
-				xhr.send();
-				if (xhr.status === 200 || xhr.status === 0) { // Status 0 for file:// protocol
-						return xhr.responseText
-				} else {
-						console.error(`Failed to load ${filePath}: ${xhr.status}`);
-				}
-		} catch (err) {
-				console.error(`Error loading ${filePath}:`, err);
-		}
-		console.log("/\\/\\/\\ FAILED")
-		return null;
-	}
-
-	//------------------------------
-	
-	var pluginProto = cr.plugins_.NopeWebkit.prototype;
+	var pluginProto = cr.plugins_.NodeWebkit.prototype;
 		
 	/////////////////////////////////////
 	// Object type class
@@ -91,7 +51,6 @@ cr.plugins_.NopeWebkit = function(runtime)
 	{
 		this.type = type;
 		this.runtime = type.runtime;
-		this.curTag = "";
 	};
 	
 	var instanceProto = pluginProto.Instance.prototype;
@@ -99,14 +58,89 @@ cr.plugins_.NopeWebkit = function(runtime)
 	// called whenever an instance is created
 	instanceProto.onCreate = function()
 	{
-		var self = this;
-
-		//We still check whether we're running in NWJS so we can fallback to classic behavior
 		isNWjs = this.runtime.isNWjs;
+		var self = this;
 		
-		//if we are NOT NWJS, load the content index file
-		index = JSON.parse(_loadFileSync("data_index.json"));
-		indexEntries = Object.entries(index);
+		if (isNWjs)
+		{
+			path = require("path");
+			fs = require("fs");
+			os = require("os");
+			child_process = require("child_process");
+			process = window["process"] || nw["process"];
+			if (process["platform"] !== "win32")
+				slash = "/";
+			nw_appfolder = path["dirname"](process["execPath"]) + slash;
+			nw_userfolder = os["homedir"]() + slash;
+			gui = window["nwgui"];
+			
+			// mainModule.filename gives full path to index.html. Strip it back to just the folder path, including the final slash.
+			nw_projectfilesfolder = process["mainModule"]["filename"];
+			var lastSlash = Math.max(nw_projectfilesfolder.lastIndexOf("/"), nw_projectfilesfolder.lastIndexOf("\\"));
+			if (lastSlash !== -1)
+				nw_projectfilesfolder = nw_projectfilesfolder.substr(0, lastSlash + 1);
+			
+			window["ondrop"] = function (e)
+			{
+				e.preventDefault();
+
+				for (var i = 0; i < e["dataTransfer"]["files"].length; ++i)
+				{
+					droppedfile = e["dataTransfer"]["files"][i]["path"];
+					self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnFileDrop, self);
+				}
+				return false;
+			};
+			
+			var openFileDialogElem = document.getElementById("c2nwOpenFileDialog");
+			
+			openFileDialogElem["onchange"] = function (e) {
+				chosenpath = openFileDialogElem.value;
+				self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnOpenDlg, self);
+				
+				// reset the chosen file to empty so choosing the same file twice in a row still fires a change
+				try {
+					openFileDialogElem.value = null;
+				}
+				catch (e) {}
+			};
+			
+			openFileDialogElem["oncancel"] = function () {
+				self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnOpenDlgCancel, self);
+			};
+			
+			var chooseFolderDialogElem = document.getElementById("c2nwChooseFolderDialog");
+			
+			chooseFolderDialogElem["onchange"] = function (e) {
+				chosenpath = chooseFolderDialogElem.value;
+				self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnFolderDlg, self);
+				
+				try {
+					chooseFolderDialogElem.value = null;
+				}
+				catch (e) {}
+			};
+			
+			chooseFolderDialogElem["oncancel"] = function () {
+				self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnFolderDlgCancel, self);
+			};
+			
+			var saveDialogElem = document.getElementById("c2nwSaveDialog");
+			
+			saveDialogElem["onchange"] = function (e) {
+				chosenpath = saveDialogElem.value;
+				self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnSaveDlg, self);
+				
+				try {
+					saveDialogElem.value = null;
+				}
+				catch (e) {}
+			};
+			
+			saveDialogElem["oncancel"] = function () {
+				self.runtime.trigger(cr.plugins_.NodeWebkit.prototype.cnds.OnSaveDlgCancel, self);
+			};
+		}
 	};
 	
 	// called whenever an instance is destroyed
@@ -144,13 +178,13 @@ cr.plugins_.NopeWebkit = function(runtime)
 	//////////////////////////////////////
 	// Conditions
 	function Cnds() {};
-	
+
 	Cnds.prototype.PathExists = function (path_)
 	{
 		if (isNWjs)
 			return fs["existsSync"](path_);
 		else
-			return _exists(_normalizePath(path_));
+			return false;
 	};
 	
 	Cnds.prototype.OnFileDrop = function ()
@@ -197,63 +231,43 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.WriteFile = function (path_, contents_)
 	{
 		if (!isNWjs)
-		{
-			//MBG TODO: must save to local data
-			console.error("NopeWebKit Action WriteFile not implemented (TODO!)");
 			return;
-		}
 		
 		try {
 			fs["writeFileSync"](path_, contents_, {"encoding": "utf8"});
 		}
 		catch (e)
 		{}
-		
-
 	};
 	
 	Acts.prototype.RenameFile = function (old_, new_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action RenameFile not implemented");
 			return;
-		}
 		
 		try {
 			fs["renameSync"](old_, new_);
 		}
 		catch (e)
 		{}
-		
 	};
 	
 	Acts.prototype.DeleteFile = function (path_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action DeleteFile not implemented");
 			return;
-		}
 		
 		try {
 			fs["unlinkSync"](path_);
 		}
 		catch (e)
 		{}
-		
 	};
 	
 	Acts.prototype.CopyFile = function (path_, dest_)
 	{
-		if(path_ === dest_)
+		if (!isNWjs || path_ === dest_)
 			return;
-		
-		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action CopyFile not implemented");
-			return;
-		}
 		
 		try {
 			// Copy using binary mode
@@ -266,14 +280,8 @@ cr.plugins_.NopeWebkit = function(runtime)
 	
 	Acts.prototype.MoveFile = function (path_, dest_)
 	{
-		if(path_ === dest_)
+		if (!isNWjs || path_ === dest_)
 			return;
-		
-		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action CopyFile not implemented");
-			return;
-		}
 		
 		try {
 			// Copy using binary mode
@@ -287,16 +295,12 @@ cr.plugins_.NopeWebkit = function(runtime)
 		}
 		catch (e)
 		{}
-		
 	};
 	
 	Acts.prototype.RunFile = function (path_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action CopyFile WILL NEVER BE IMPLEMENTED");
 			return;
-		}
 		
 		child_process["exec"](path_, function() {});
 	};
@@ -304,10 +308,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.ShellOpen = function (path_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action ShellOpen WILL NEVER BE IMPLEMENTED");
 			return;
-		}
 		
 		nw["Shell"]["openItem"](path_);
 	};
@@ -315,10 +316,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.OpenBrowser = function (url_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action OpenBrowser WILL NEVER BE IMPLEMENTED");
 			return;
-		}
 		
 		var opener;
 		
@@ -340,10 +338,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.CreateFolder = function (path_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action CreateFolder not implemented");
 			return;
-		}
 		
 		try {
 			fs["mkdirSync"](path_);
@@ -355,10 +350,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.AppendFile = function (path_, contents_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action AppendFile not implemented");
 			return;
-		}
 		
 		try {
 			fs["appendFileSync"](path_, contents_, {"encoding": "utf8"});
@@ -370,20 +362,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.ListFiles = function (path_)
 	{
 		if (!isNWjs)
-		{
-			path_ = _normalizePath(path_);
-			const lookedup = index[path_];
-			if(lookedup)
-			{
-				const children = lookedup[3];
-				filelist = new Array(children.length);
-				for(let i=0;i<children.length;i++)
-					filelist[i] = indexEntries[children[i]][1][2];
-			}
-			else
-				filelist = [];
 			return;
-		}
 		
 		try {
 			filelist = fs["readdirSync"](path_);
@@ -401,10 +380,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.ShowOpenDlg = function (accept_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action ShowOpenDlg WILL NEVER BE IMPLEMENTED");
 			return;
-		}
 			
 		var dlg = jQuery("#c2nwOpenFileDialog");
 		dlg.attr("accept", accept_);
@@ -414,10 +390,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.ShowFolderDlg = function (accept_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action ShowFolderDlg WILL NEVER BE IMPLEMENTED");
 			return;
-		}
 			
 		jQuery("#c2nwChooseFolderDialog").trigger("click");
 	};
@@ -425,10 +398,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 	Acts.prototype.ShowSaveDlg = function (accept_)
 	{
 		if (!isNWjs)
-		{
-			console.error("NopeWebKit Action ShowSaveDlg WILL NEVER BE IMPLEMENTED");
 			return;
-		}
 		
 		var dlg = jQuery("#c2nwSaveDialog");
 		dlg.attr("accept", accept_);
@@ -623,53 +593,39 @@ cr.plugins_.NopeWebkit = function(runtime)
 	
 	Exps.prototype.ReadFile = function (ret, path_)
 	{
-		if(isNWjs)
-		{
-			var contents = "";
-			
-			try {
-				contents = fs["readFileSync"](path_, {"encoding": "utf8"});
-			}
-			catch (e) {}
-			
-			ret.set_string(contents);
-			return;
-		}
-		
-		path_ = _normalizePath(path_);
-		
-		if(!_exists(path_))
+		if (!isNWjs)
 		{
 			ret.set_string("");
 			return;
 		}
 		
-		ret.set_string(_loadFileSync(path_));
+		var contents = "";
+		
+		try {
+			contents = fs["readFileSync"](path_, {"encoding": "utf8"});
+		}
+		catch (e) {}
+		
+		ret.set_string(contents);
 	};
 	
 	Exps.prototype.FileSize = function (ret, path_)
 	{
-		if (isNWjs)
+		if (!isNWjs)
 		{
-			var size = 0;
-			
-			try {
-				var stat = fs["statSync"](path_);
-				if (stat)
-					size = stat["size"] || 0;
-			}
-			catch (e) {}
-			
-			ret.set_int(size);
+			ret.set_int(0);
 			return;
 		}
 		
 		var size = 0;
-		path_ = _normalizePath(path_);
-		var lookedup = index[path_];
-		if(lookedup)
-			size = lookedup[1];
-			
+		
+		try {
+			var stat = fs["statSync"](path_);
+			if (stat)
+				size = stat["size"] || 0;
+		}
+		catch (e) {}
+		
 		ret.set_int(size);
 	};
 	

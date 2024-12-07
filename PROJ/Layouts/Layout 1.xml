@@ -105,30 +105,6 @@
                         <hotspotY>0</hotspotY>
                     </world>
                 </instance>
-                <instance type="btn_AjaxReadFileAsync" uid="7">
-                    <properties>
-                        <type>Button</type>
-                        <text>AJAX ReadFile (async)</text>
-                        <tooltip></tooltip>
-                        <initial-visibility>Visible</initial-visibility>
-                        <enabled>Yes</enabled>
-                        <auto-font-size>Yes</auto-font-size>
-                        <id-optional></id-optional>
-                        <checked>No</checked>
-                    </properties>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>48</x>
-                        <y>66</y>
-                        <z>0</z>
-                        <width>232</width>
-                        <height>24</height>
-                        <depth>0</depth>
-                        <hotspotX>0</hotspotX>
-                        <hotspotY>0</hotspotY>
-                    </world>
-                </instance>
                 <instance type="Text" uid="8">
                     <properties>
                         <text>Should be 896648 but things are complex for binary files...</text>
@@ -156,10 +132,10 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
-                <instance type="btn_NopeReadFileAsyncImg" uid="9">
+                <instance type="Button" uid="7">
                     <properties>
                         <type>Button</type>
-                        <text>NopeWebKit+ReadFile (async) [as image]</text>
+                        <text>NopeWebKit+ListFiles</text>
                         <tooltip></tooltip>
                         <initial-visibility>Visible</initial-visibility>
                         <enabled>Yes</enabled>
@@ -170,10 +146,10 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>52</x>
-                        <y>118</y>
+                        <x>54</x>
+                        <y>76</y>
                         <z>0</z>
-                        <width>283</width>
+                        <width>176</width>
                         <height>24</height>
                         <depth>0</depth>
                         <hotspotX>0</hotspotX>
