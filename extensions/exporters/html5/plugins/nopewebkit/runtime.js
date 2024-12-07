@@ -38,6 +38,8 @@ cr.plugins_.NopeWebkit = function(runtime)
 	
 	function _normalizePath(filePath)
 	{
+		filePath = filePath.replace(/\\/g, '/');
+	
 		if(filePath[0] != '/')
 			filePath = '/' + filePath;
 		return filePath;
