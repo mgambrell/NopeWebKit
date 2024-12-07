@@ -7,7 +7,7 @@
         <variable constant="0" name="duration" sid="340474876459454" static="0" type="number">0</variable>
         <event-block sid="443153982082995">
             <conditions>
-                <condition id="0" name="On clicked" sid="140288246035894" type="btn_NopeReadFileSync" />
+                <condition id="0" name="On clicked" sid="140288246035894" type="btn_NopeReadFile" />
             </conditions>
             <actions>
                 <action id="0" name="Call function" sid="118796455928770" type="Function">
@@ -97,11 +97,40 @@
         </event-block>
         <event-block sid="363851420568804">
             <conditions>
-                <condition id="0" name="On clicked" sid="168181586700216" type="Button" />
+                <condition id="0" name="On clicked" sid="168181586700216" type="btn_NopeListFiles" />
             </conditions>
             <actions>
                 <action id="5" name="List files" sid="216442607024302" type="NopeWebkit">
                     <param id="0" name="Path">&quot;/Test&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="571162082721400">
+            <conditions>
+                <condition id="0" name="On clicked" sid="824521086549265" type="btn_NopeWriteFile" />
+            </conditions>
+            <actions>
+                <action id="0" name="Write file" sid="557892151165199" type="NopeWebkit">
+                    <param id="0" name="Path">&quot;/AppData/Roaming/Tendershoot/HypnOS/GlobalSettings.gsav&quot;</param>
+                    <param id="1" name="Contents">&quot;soglobalbaby&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="913242463826593">
+            <conditions>
+                <condition id="0" name="On clicked" sid="557331713171572" type="btn_NopeWriteFileReadback" />
+            </conditions>
+            <actions>
+                <action id="0" name="Call function" sid="403579958517500" type="Function">
+                    <param id="0" name="Name">&quot;StartTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+                <action id="0" name="Set text" sid="644115920915276" type="XSize">
+                    <param id="0" name="Text">str(len(NopeWebkit.ReadFile(&quot;/AppData/Roaming/Tendershoot/HypnOS/GlobalSettings.gsav&quot;)))</param>
+                </action>
+                <action id="0" name="Call function" sid="478288244757109" type="Function">
+                    <param id="0" name="Name">&quot;EndTimer&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
                 </action>
             </actions>
         </event-block>

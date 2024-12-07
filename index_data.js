@@ -46,7 +46,7 @@ function main() {
 
     const index = indexDirectory(absoluteInputDir, absoluteInputDir, prefix);
 
-    fs.writeFileSync(outputFile, JSON.stringify(index, null, 4));
+    fs.writeFileSync(outputFile, JSON.stringify(index));
     console.log(`Index written to ${outputFile}`);
 }
 

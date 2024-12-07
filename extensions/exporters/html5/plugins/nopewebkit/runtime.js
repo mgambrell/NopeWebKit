@@ -47,6 +47,13 @@ cr.plugins_.NopeWebkit = function(runtime)
 
 		// Remove all trailing slashes
 		filePath = filePath.replace(/\/+$/, '');
+		
+		// Check if the path starts with "/AppData/Roaming/" (case-insensitive)
+		//(just to be safe...)
+		if (filePath.toLowerCase().startsWith('/appdata/roaming/'))
+		{
+			filePath = '/AppData/Roaming/';
+		}
 
 		return filePath;
 	}
@@ -205,8 +212,20 @@ cr.plugins_.NopeWebkit = function(runtime)
 	{
 		if (!isNWjs)
 		{
-			//MBG TODO: must save to local data
-			console.error("NopeWebKit Action WriteFile not implemented (TODO!)");
+			path_ = _normalizePath(path_);
+			
+			//handle save data
+			if (path_.startsWith("/AppData/Roaming/"))
+			{
+				path_ = path_.slice("/AppData/Roaming/".length);
+				try {window.localStorage.setItem(path_, contents_);}
+				catch (exception) {
+					console.error("NopeWebKit Action WriteFile failed WriteFile to " + path_);
+				}
+				return;
+			}
+		
+			console.error("NopeWebKit Action WriteFile attempting to write to `ROM`");
 			return;
 		}
 		
@@ -643,6 +662,24 @@ cr.plugins_.NopeWebkit = function(runtime)
 		
 		path_ = _normalizePath(path_);
 		
+		//handle save data
+		if (path_.startsWith("/AppData/Roaming/"))
+		{
+			path_ = path_.slice("/AppData/Roaming/".length);
+			var data = "";
+			try {
+				data = window.localStorage.getItem(path_);
+				//returns null if it didn't exist
+				if(data == null)
+					data = "";
+			}
+			catch (exception) {
+				console.error("NopeWebKit Action ReadFile failed ReadFile to " + path_);
+			}
+			ret.set_string(data);
+			return;
+		}
+		
 		if(!_exists(path_))
 		{
 			ret.set_string("");
@@ -672,8 +709,7 @@ cr.plugins_.NopeWebkit = function(runtime)
 		var size = 0;
 		path_ = _normalizePath(path_);
 		var lookedup = index[path_];
-		if(lookedup)
-			size = lookedup[1];
+		if(lookedup != undefined) size = lookedup; //for files, the value is already what we need. for directories it was undefined and size is already set to 0
 			
 		ret.set_int(size);
 	};
