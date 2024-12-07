@@ -112,7 +112,7 @@
             <actions>
                 <action id="0" name="Write file" sid="557892151165199" type="NopeWebkit">
                     <param id="0" name="Path">&quot;/AppData/Roaming/Tendershoot/HypnOS/GlobalSettings.gsav&quot;</param>
-                    <param id="1" name="Contents">&quot;soglobalbaby&quot;</param>
+                    <param id="1" name="Contents">&quot;soglobalbaby55&quot;</param>
                 </action>
             </actions>
         </event-block>
