@@ -31,17 +31,23 @@ cr.plugins_.NopeWebkit = function(runtime)
 	//utilities for FS emulation
 	const xhr = new XMLHttpRequest();
 	var index = null;
-	var indexEntries = null;
 	
 	//------------------------------
 	//LOCAL UTILITIES
 	
 	function _normalizePath(filePath)
 	{
+		// Replace all backslashes with forward slashes
 		filePath = filePath.replace(/\\/g, '/');
-	
-		if(filePath[0] != '/')
+
+		// Ensure the path starts with a forward slash
+		if (filePath[0] !== '/') {
 			filePath = '/' + filePath;
+		}
+
+		// Remove all trailing slashes
+		filePath = filePath.replace(/\/+$/, '');
+
 		return filePath;
 	}
 	
@@ -108,7 +114,6 @@ cr.plugins_.NopeWebkit = function(runtime)
 		
 		//if we are NOT NWJS, load the content index file
 		index = JSON.parse(_loadFileSync("data_index.json"));
-		indexEntries = Object.entries(index);
 	};
 	
 	// called whenever an instance is destroyed
@@ -377,10 +382,8 @@ cr.plugins_.NopeWebkit = function(runtime)
 			const lookedup = index[path_];
 			if(lookedup)
 			{
-				const children = lookedup[3];
-				filelist = new Array(children.length);
-				for(let i=0;i<children.length;i++)
-					filelist[i] = indexEntries[children[i]][1][2];
+				const children = lookedup; //value of lookup was always the child list
+				filelist = children; //no further adaptation is required.
 			}
 			else
 				filelist = [];
